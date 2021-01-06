@@ -29,12 +29,6 @@ resource "aws_lambda_function" "go-api-test" {
   runtime       = "go1.x"
   memory_size   = 1024
   timeout       = 300
-
-  environment {
-    variables = {
-      APP_ENV = "production"
-    }
-  }
 }
 
 resource "aws_cloudwatch_log_group" "go-api-test" {

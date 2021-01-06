@@ -38,7 +38,7 @@ output "api_url" {
 
 variable "app_name" {
   description = "Application name"
-  default     = "sample-lambda-api"
+  default     = "passbook-api"
 }
 
 variable "app_env" {

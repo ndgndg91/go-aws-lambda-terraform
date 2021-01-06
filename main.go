@@ -16,6 +16,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	fmt.Println(username)
 	fmt.Println(email)
 	fmt.Println(request)
+	fmt.Print(request.HTTPMethod)
 
 	return events.APIGatewayProxyResponse{
 		Body:       fmt.Sprint("Resource is created."),
