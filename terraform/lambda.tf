@@ -21,7 +21,7 @@ resource "aws_iam_role_policy_attachment" "passbook-api" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_lambda_function" "passbook-delete-account" {
+resource "aws_lambda_function" "passbook_delete_account" {
   function_name = "passbook-delete-account"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_delete_account_source_key
@@ -32,7 +32,7 @@ resource "aws_lambda_function" "passbook-delete-account" {
   timeout       = 30
 }
 
-resource "aws_lambda_function" "passbook-delete-bank-account" {
+resource "aws_lambda_function" "passbook_delete_bank_account" {
   function_name = "passbook-delete-bank-account"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_delete_bank_account_source_key
@@ -43,7 +43,7 @@ resource "aws_lambda_function" "passbook-delete-bank-account" {
   timeout       = 30
 }
 
-resource "aws_lambda_function" "passbook-get-bank-account" {
+resource "aws_lambda_function" "passbook_get_bank_account" {
   function_name = "passbook-get-bank-account"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_get_bank_account_source_key
@@ -54,7 +54,7 @@ resource "aws_lambda_function" "passbook-get-bank-account" {
   timeout       = 30
 }
 
-resource "aws_lambda_function" "passbook-get-my-info" {
+resource "aws_lambda_function" "passbook_get_my_info" {
   function_name = "passbook-get-my-info"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_get_my_info_source_key
@@ -65,7 +65,7 @@ resource "aws_lambda_function" "passbook-get-my-info" {
   timeout       = 30
 }
 
-resource "aws_lambda_function" "passbook-post-account" {
+resource "aws_lambda_function" "passbook_post_account" {
   function_name = "passbook-post-account"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_post_account_source_key
@@ -76,7 +76,7 @@ resource "aws_lambda_function" "passbook-post-account" {
   timeout       = 30
 }
 
-resource "aws_lambda_function" "passbook-post-bank-account" {
+resource "aws_lambda_function" "passbook_post_bank_account" {
   function_name = "passbook-post-bank-account"
   s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
   s3_key        = var.passbook_post_bank_account_source_key

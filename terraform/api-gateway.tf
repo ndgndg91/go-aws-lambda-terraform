@@ -80,7 +80,7 @@ resource "aws_api_gateway_integration" "delete_accounts_integration" {
   http_method             = aws_api_gateway_method.delete_account.http_method
   integration_http_method = "DELETE"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-delete-account.invoke_arn
+  uri                     = aws_lambda_function.passbook_delete_account.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "delete_bank_accounts_integration" {
@@ -89,7 +89,7 @@ resource "aws_api_gateway_integration" "delete_bank_accounts_integration" {
   http_method             = aws_api_gateway_method.delete_bank_accounts.http_method
   integration_http_method = "DELETE"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-delete-bank-account.invoke_arn
+  uri                     = aws_lambda_function.passbook_delete_bank_account.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "get_bank_accounts_integration" {
@@ -98,7 +98,7 @@ resource "aws_api_gateway_integration" "get_bank_accounts_integration" {
   http_method             = aws_api_gateway_method.get_bank_accounts.http_method
   integration_http_method = "GET"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-get-bank-account.invoke_arn
+  uri                     = aws_lambda_function.passbook_get_bank_account.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "get_my_info_integration" {
@@ -107,7 +107,7 @@ resource "aws_api_gateway_integration" "get_my_info_integration" {
   http_method             = aws_api_gateway_method.get_my_info.http_method
   integration_http_method = "GET"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-get-my-info.invoke_arn
+  uri                     = aws_lambda_function.passbook_get_my_info.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "post_accounts_integration" {
@@ -116,7 +116,7 @@ resource "aws_api_gateway_integration" "post_accounts_integration" {
   http_method             = aws_api_gateway_method.post_account.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-post-account.invoke_arn
+  uri                     = aws_lambda_function.passbook_post_account.invoke_arn
 }
 
 resource "aws_api_gateway_integration" "post_bank_accounts_integration" {
@@ -125,7 +125,7 @@ resource "aws_api_gateway_integration" "post_bank_accounts_integration" {
   http_method             = aws_api_gateway_method.post_bank_accounts.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.passbook-post-bank-account.invoke_arn
+  uri                     = aws_lambda_function.passbook_post_bank_account.invoke_arn
 }
 
 
@@ -144,9 +144,62 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   stage_name = "test"
 }
 
-resource "aws_lambda_permission" "lambda_permission" {
+resource "aws_lambda_permission" "passbook_delete_account" {
   action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.passbook-delete-account.arn
+  function_name = aws_lambda_function.passbook_delete_account.function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${aws_api_gateway_deployment.api_deployment.execution_arn}/*/*"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "passbook_delete_bank_account" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.passbook_delete_bank_account.function_name
+  principal = "apigateway.amazonaws.com"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "passbook_get_bank_account" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.passbook_get_bank_account.function_name
+  principal = "apigateway.amazonaws.com"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "passbook_get_my_info" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.passbook_get_my_info.function_name
+  principal = "apigateway.amazonaws.com"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "passbook_post_account" {
+  action = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.passbook_post_account.function_name
+  principal = "apigateway.amazonaws.com"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
+}
+
+resource "aws_lambda_permission" "passbook_post_bank_account" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.passbook_post_bank_account.function_name
+  principal     = "apigateway.amazonaws.com"
+
+  # The "/*/*" portion grants access from any method on any resource
+  # within the API Gateway REST API.
+  source_arn = "${aws_api_gateway_rest_api.gateway.execution_arn}/*/*"
 }
