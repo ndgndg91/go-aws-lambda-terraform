@@ -6,30 +6,71 @@ GOCLEAN=$(GOCMD) clean
 GOTEST=$(GOCMD) test
 GOGET=$(GOCMD) get
 BINARY_NAME=main
+PACKAGE_NAME=lambda.zip
 
 S3_BUCKET=go-api-test
 LAMBDA_NAME=go-api-test
+DELETE_ACCOUNT_LAMBDA_NAME=passbook-delete-account
+DELETE_BANK_ACCOUNT_LAMBDA_NAME=passbok-delte-bank-account
+GET_BANK_ACCOUNT_LAMBDA_NAME=passbook-get-bank-account
+GET_MY_INFO_LAMBDA_NAME=passbook-get-my-info
+POST_ACCOUNT_LAMBDA_NAME=passbook-post-account
+POST_BANK_ACCOUNT_LAMBDA_NAME=passbook-post-bank-account
 
-all: test build
 build:
-	$(GOBUILD) -o $(BINARY_NAME) -v
-test:
-	$(GOTEST) -v ./...
+	cd delete-account && $(GOBUILD) -o $(BINARY_NAME) -v && cd ..
+	cd delete-bank-account && $(GOBUILD) -o $(BINARY_NAME) -v && cd ..
+	cd get-bank-account && $(GOBUILD) -o $(BINARY_NAME) -v && cd ..
+	cd get-my-info && $(GOBUILD) -o $(BINARY_NAME) -v && cd ..
+	cd post-account && $(GOBUILD) -o $(BINARY_NAME) -v && cd ..
+	cd post-bank-account && $(GOBUILD) -o $(BINARY_NAME) -v
 clean:
-	$(GOCLEAN)
-	rm -f $(BINARY_NAME)
+	$(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip
+	cd delete-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
+	cd delete-bank-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
+	cd get-bank-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
+	cd get-my-info && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
+	cd post-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
+	cd post-bank-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip
 deps:
 	$(GOGET) github.com/aws/aws-sdk-go
 	$(GOGET) github.com/aws/aws-lambda-go
 	$(GOGET) github.com/aws/aws-lambda-go
 build-linux:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd delete-account && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd delete-bank-account && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd get-bank-account && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd get-my-info && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd post-account && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
+	cd post-bank-account && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o $(BINARY_NAME) -v
 package: build-linux
-	zip lambda.zip main
+	cd delete-account && zip $(PACKAGE_NAME) $(BINARY_NAME)
+	cd delete-bank-account && zip $(PACKAGE_NAME) $(BINARY_NAME)
+	cd get-bank-account && zip $(PACKAGE_NAME) $(BINARY_NAME)
+	cd get-my-info && zip $(PACKAGE_NAME) $(BINARY_NAME)
+	cd post-account && zip $(PACKAGE_NAME) $(BINARY_NAME)
+	cd post-bank-account && zip $(PACKAGE_NAME) $(BINARY_NAME)
 deploy: package
-	aws s3 cp ./lambda.zip s3://${S3_BUCKET}/${LAMBDA_NAME}/
-	aws lambda update-function-code \
-		--region ap-northeast-2 \
-		--function-name ${LAMBDA_NAME} \
-		--s3-bucket ${S3_BUCKET} \
-		--s3-key ${LAMBDA_NAME}/lambda.zip --publish
+	cd delete-account && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${DELETE_ACCOUNT_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${DELETE_ACCOUNT_LAMBDA_NAME} \
+		--s3-bucket ${S3_BUCKET} --s3-key ${DELETE_ACCOUNT_LAMBDA_NAME}/${PACKAGE_NAME} --publish
+	cd ..
+	cd delete-bank-account && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${DELETE_BANK_ACCOINT_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${DELETE_BANK_ACCOINT_LAMBDA_NAME} \
+		--s3-bucket ${S3_BUCKET} --s3-key ${DELETE_BANK_ACCOINT_LAMBDA_NAME}/${PACKAGE_NAME} --publish
+	cd ..
+	cd get-bank-account && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${GET_BANK_ACCOINT_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${GET_BANK_ACCOINT_LAMBDA_NAME} \
+    	--s3-bucket ${S3_BUCKET} --s3-key ${GET_BANK_ACCOINT_LAMBDA_NAME}/${PACKAGE_NAME} --publish
+	cd ..
+	cd get-my-info && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${GET_MY_INFO_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${GET_MY_INFO_LAMBDA_NAME} \
+		--s3-bucket ${S3_BUCKET} --s3-key ${GET_MY_INFO_LAMBDA_NAME}/${PACKAGE_NAME} --publish
+	cd ..
+	cd post-account && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${POST_ACCOUNT_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${POST_ACCOUNT_LAMBDA_NAME} \
+		--s3-bucket ${S3_BUCKET} --s3-key ${POST_ACCOUNT_LAMBDA_NAME}/${PACKAGE_NAME} --publish
+	cd ..
+	cd post-bank-account && aws s3 cp $(PACKAGE_NAME) s3://${S3_BUCKET}/${POST_BANK_ACCOUNT_LAMBDA_NAME}
+	aws lambda update-function-code --region ap-northeast-2 --function-name ${POST_BANK_ACCOUNT_LAMBDA_NAME} \
+		--s3-bucket ${S3_BUCKET} --s3-key ${POST_BANK_ACCOUNT_LAMBDA_NAME}/${PACKAGE_NAME} --publish
