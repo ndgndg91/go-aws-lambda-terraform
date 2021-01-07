@@ -78,7 +78,7 @@ resource "aws_api_gateway_integration" "delete_accounts_integration" {
   rest_api_id             = aws_api_gateway_rest_api.gateway.id
   resource_id             = aws_api_gateway_resource.accounts.id
   http_method             = aws_api_gateway_method.delete_account.http_method
-  integration_http_method = "DELETE"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.passbook_delete_account.invoke_arn
 }
@@ -87,7 +87,7 @@ resource "aws_api_gateway_integration" "delete_bank_accounts_integration" {
   rest_api_id             = aws_api_gateway_rest_api.gateway.id
   resource_id             = aws_api_gateway_resource.bank_accounts.id
   http_method             = aws_api_gateway_method.delete_bank_accounts.http_method
-  integration_http_method = "DELETE"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.passbook_delete_bank_account.invoke_arn
 }
@@ -96,7 +96,7 @@ resource "aws_api_gateway_integration" "get_bank_accounts_integration" {
   rest_api_id             = aws_api_gateway_rest_api.gateway.id
   resource_id             = aws_api_gateway_resource.bank_accounts.id
   http_method             = aws_api_gateway_method.get_bank_accounts.http_method
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.passbook_get_bank_account.invoke_arn
 }
@@ -105,7 +105,7 @@ resource "aws_api_gateway_integration" "get_my_info_integration" {
   rest_api_id             = aws_api_gateway_rest_api.gateway.id
   resource_id             = aws_api_gateway_resource.my_info.id
   http_method             = aws_api_gateway_method.get_my_info.http_method
-  integration_http_method = "GET"
+  integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.passbook_get_my_info.invoke_arn
 }
@@ -155,9 +155,9 @@ resource "aws_lambda_permission" "passbook_delete_account" {
 }
 
 resource "aws_lambda_permission" "passbook_delete_bank_account" {
-  action = "lambda:InvokeFunction"
+  action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.passbook_delete_bank_account.function_name
-  principal = "apigateway.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
 
   # The "/*/*" portion grants access from any method on any resource
   # within the API Gateway REST API.
@@ -165,9 +165,9 @@ resource "aws_lambda_permission" "passbook_delete_bank_account" {
 }
 
 resource "aws_lambda_permission" "passbook_get_bank_account" {
-  action = "lambda:InvokeFunction"
+  action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.passbook_get_bank_account.function_name
-  principal = "apigateway.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
 
   # The "/*/*" portion grants access from any method on any resource
   # within the API Gateway REST API.
@@ -175,9 +175,9 @@ resource "aws_lambda_permission" "passbook_get_bank_account" {
 }
 
 resource "aws_lambda_permission" "passbook_get_my_info" {
-  action = "lambda:InvokeFunction"
+  action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.passbook_get_my_info.function_name
-  principal = "apigateway.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
 
   # The "/*/*" portion grants access from any method on any resource
   # within the API Gateway REST API.
@@ -185,9 +185,9 @@ resource "aws_lambda_permission" "passbook_get_my_info" {
 }
 
 resource "aws_lambda_permission" "passbook_post_account" {
-  action = "lambda:InvokeFunction"
+  action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.passbook_post_account.function_name
-  principal = "apigateway.amazonaws.com"
+  principal     = "apigateway.amazonaws.com"
 
   # The "/*/*" portion grants access from any method on any resource
   # within the API Gateway REST API.
