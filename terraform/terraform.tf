@@ -4,7 +4,7 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket         = "go-api-test"
+    bucket         = "passbook-api"
     key            = "terraform.tfstate"
     region         = "ap-northeast-2"
     encrypt        = true
@@ -15,8 +15,8 @@ terraform {
 // data.tf
 data "aws_caller_identity" "current" {}
 
-data "aws_s3_bucket" "go-api-test" {
-  bucket = "go-api-test"
+data "aws_s3_bucket" "passbook-api" {
+  bucket = "passbook-api"
 }
 
 output "account_id" {
@@ -24,7 +24,7 @@ output "account_id" {
 }
 
 output "s3_bucket" {
-  value = data.aws_s3_bucket.go-api-test.bucket
+  value = data.aws_s3_bucket.passbook-api.bucket
 }
 
 // providers.tf
@@ -44,6 +44,36 @@ variable "app_name" {
 variable "app_env" {
   description = "Application environment tag"
   default     = "dev"
+}
+
+variable "passbook_delete_account_source_key" {
+  description = "passbook delete account lambda function source object key"
+  default = "passbook-delete-account/lambda.zip"
+}
+
+variable "passbook_delete_bank_account_source_key" {
+  description = "passbook delete bank account lambda function source object key"
+  default = "passbook-delete-bank-account/lambda.zip"
+}
+
+variable "passbook_get_bank_account_source_key" {
+  description = "passbook get bank account lambda function source object key"
+  default = "passbook-get-bank-account/lambda.zip"
+}
+
+variable "passbook_get_my_info_source_key" {
+  description = "passbook get my info lambda function source object key"
+  default = "passbook-get-my-info/lambda.zip"
+}
+
+variable "passbook_post_account_source_key" {
+  description = "passbook post account lambda function source object key"
+  default = "passbook-post-account/lambda.zip"
+}
+
+variable "passbook_post_bank_account_source_key" {
+  description = "passbook post bank account lambda function source object key"
+  default = "passbook-post-bank-account/lambda.zip"
 }
 
 resource "random_id" "unique_suffix" {

@@ -1,5 +1,5 @@
-resource "aws_iam_role" "go-api-test" {
-  name = "LambdaRole_GoAPITest"  # 고유한 이름이어야 한다.
+resource "aws_iam_role" "passbook-api" {
+  name = "LambdaRole_PassbookAPI"  # 고유한 이름이어야 한다.
 
   assume_role_policy = <<EOF
 {
@@ -16,21 +16,73 @@ resource "aws_iam_role" "go-api-test" {
 EOF
 }
 
-resource "aws_iam_role_policy_attachment" "go-api-test" {
-  role       = aws_iam_role.go-api-test.name
+resource "aws_iam_role_policy_attachment" "passbook-api" {
+  role       = aws_iam_role.passbook-api.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
 
-resource "aws_lambda_function" "go-api-test" {
-  function_name = "go-api-test"
-  role          = aws_iam_role.go-api-test.arn
-  filename      = "../lambda.zip"  # 우선 로컬에 있는 파일을 직접 업로드한다.
+resource "aws_lambda_function" "passbook-delete-account" {
+  function_name = "passbook-delete-account"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_delete_account_source_key
+  role          = aws_iam_role.passbook-api.arn
   handler       = "main"
   runtime       = "go1.x"
   memory_size   = 1024
-  timeout       = 300
+  timeout       = 30
 }
 
-resource "aws_cloudwatch_log_group" "go-api-test" {
-  name = "/aws/lambda/go-api-test"
+resource "aws_lambda_function" "passbook-delete-bank-account" {
+  function_name = "passbook-delete-bank-account"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_delete_bank_account_source_key
+  handler       = "main"
+  role          = aws_iam_role.passbook-api.arn
+  runtime       = "go1.x"
+  memory_size   = 1024
+  timeout       = 30
+}
+
+resource "aws_lambda_function" "passbook-get-bank-account" {
+  function_name = "passbook-get-bank-account"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_get_bank_account_source_key
+  handler       = "main"
+  role          = aws_iam_role.passbook-api.arn
+  runtime       = "go1.x"
+  memory_size   = 1024
+  timeout       = 30
+}
+
+resource "aws_lambda_function" "passbook-get-my-info" {
+  function_name = "passbook-get-my-info"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_get_my_info_source_key
+  handler       = "main"
+  role          = aws_iam_role.passbook-api.arn
+  runtime       = "go1.x"
+  memory_size   = 1024
+  timeout       = 30
+}
+
+resource "aws_lambda_function" "passbook-post-account" {
+  function_name = "passbook-post-account"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_post_account_source_key
+  handler       = "main"
+  role          = aws_iam_role.passbook-api.arn
+  runtime       = "go1.x"
+  memory_size   = 1024
+  timeout       = 30
+}
+
+resource "aws_lambda_function" "passbook-post-bank-account" {
+  function_name = "passbook-post-bank-account"
+  s3_bucket     = data.aws_s3_bucket.passbook-api.bucket
+  s3_key        = var.passbook_post_bank_account_source_key
+  handler       = "main"
+  role          = aws_iam_role.passbook-api.arn
+  runtime       = "go1.x"
+  memory_size   = 1024
+  timeout       = 30
 }
