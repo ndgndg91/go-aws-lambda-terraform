@@ -9,10 +9,8 @@ import (
 )
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println(request.QueryStringParameters)
-
+	fmt.Println("get-bank-account called.")
 	fmt.Println(request)
-	fmt.Print(request.HTTPMethod)
 
 	return events.APIGatewayProxyResponse{
 		Body:       fmt.Sprint("get-bank-account"),

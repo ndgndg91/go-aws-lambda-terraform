@@ -9,14 +9,8 @@ import (
 )
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	fmt.Println(request.QueryStringParameters)
-	username := request.QueryStringParameters["username"]
-	email := request.QueryStringParameters["email"]
-
-	fmt.Println(username)
-	fmt.Println(email)
+	fmt.Println("delete-accounts called!!!!")
 	fmt.Println(request)
-	fmt.Print(request.HTTPMethod)
 
 	return events.APIGatewayProxyResponse{
 		Body:       fmt.Sprint("delete-accounts"),
