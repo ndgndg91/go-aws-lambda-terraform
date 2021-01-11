@@ -32,6 +32,7 @@ clean:
 	cd post-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip && cd ..
 	cd post-bank-account && $(GOCLEAN) && rm -f $(BINARY_NAME) && rm -f lambda.zip
 deps:
+	$(GOGET) github.com/jmoiron/sqlx
 	$(GOGET) github.com/aws/aws-sdk-go
 	$(GOGET) github.com/aws/aws-lambda-go
 build-linux:

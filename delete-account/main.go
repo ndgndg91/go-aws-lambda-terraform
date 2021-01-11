@@ -19,7 +19,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 	fmt.Print(request.HTTPMethod)
 
 	return events.APIGatewayProxyResponse{
-		Body:       fmt.Sprint("Resource is created."),
+		Body:       fmt.Sprint("delete-accounts"),
 		StatusCode: http.StatusCreated,
 	}, nil
 }
