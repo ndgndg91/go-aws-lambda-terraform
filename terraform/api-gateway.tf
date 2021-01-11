@@ -144,6 +144,22 @@ resource "aws_api_gateway_deployment" "api_deployment" {
   stage_name = "test"
 }
 
+resource "aws_api_gateway_method_settings" "general_settings" {
+  method_path = "*/*"
+  rest_api_id = aws_api_gateway_rest_api.gateway.id
+  stage_name = aws_api_gateway_deployment.api_deployment.stage_name
+  settings {
+    # Enable CloudWatch logging and metrics
+    metrics_enabled        = true
+    data_trace_enabled     = true
+    logging_level          = "ERROR"
+
+    # Limit the rate of calls to prevent abuse and unwanted charges
+    throttling_rate_limit  = 100
+    throttling_burst_limit = 50
+  }
+}
+
 resource "aws_lambda_permission" "passbook_delete_account" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.passbook_delete_account.function_name

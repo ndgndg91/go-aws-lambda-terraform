@@ -16,7 +16,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		Body:       fmt.Sprint("get-my-info"),
-		StatusCode: http.StatusCreated,
+		StatusCode: http.StatusOK,
 	}, nil
 }
 

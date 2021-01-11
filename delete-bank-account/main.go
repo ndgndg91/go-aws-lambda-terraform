@@ -16,7 +16,7 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 
 	return events.APIGatewayProxyResponse{
 		Body:       fmt.Sprint("delete-bank-account"),
-		StatusCode: http.StatusCreated,
+		StatusCode: http.StatusNoContent,
 	}, nil
 }
 
